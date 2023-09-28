@@ -1,23 +1,27 @@
 @detectDelim
 
-@top TurtleDoc {
-  Statement*
+@top N3Doc {
+  ((N3Statement ".") | SparqlDirective)*
 }
 
-Statement {
-  Directive | Triples '.'
+N3Statement {
+  N3Directive | Triples
 }
 
-Directive {
-  PrefixID | Base | SparqlPrefix | SparqlBase
+N3Directive {
+  PrefixID | Base
+}
+
+SparqlDirective {
+  SparqlPrefix | SparqlBase
 }
 
 PrefixID {
-  '@prefix' Pname_ns Iriref '.'
+  '@prefix' Pname_ns Iriref
 }
 
 Base {
-  '@base' Iriref '.'
+  '@base' Iriref
 }
 
 SparqlBase {
@@ -29,11 +33,11 @@ SparqlPrefix {
 }
 
 Triples	{
-  Subject ( PredicateObjectList | BlankNodePropertyList ) PredicateObjectList?  
+  Subject PredicateObjectList?  
 }
 
 PredicateObjectList {
-  Verb ObjectList (';' Verb ObjectList)*
+  Verb ObjectList (';' (Verb ObjectList)?)*
 }
 
 ObjectList {
@@ -41,19 +45,44 @@ ObjectList {
 }
 
 Verb {
-  Predicate | 'a'
+  Predicate 
+  | 'a'
+  | 'has' Expression
+  | 'is' Expression 'of'
+  | '='
+  | '<='
+  | '=>'
 }
 
 Subject {
-  Iri | BlankNode | Collection
+  Expression
 }
 
 Predicate {
-  Iri
+  (Expression | '<-' Expression)
 }
 
 Object {
-  Iri | BlankNode | Collection | BlankNodePropertyList | Literal
+  Expression
+}
+
+Expression {
+  Path
+}
+
+Path {
+  PathItem ('!' Path | '^' Path)?
+}
+
+PathItem {
+  Iri
+  | BlankNode
+  | QuickVar
+  | Collection
+  | BlankNodePropertyList
+  | IriPropertyList
+  | Literal
+  | Formula
 }
 
 Literal {
@@ -64,8 +93,21 @@ BlankNodePropertyList {
   '[' PredicateObjectList ']'
 }
 
+IriPropertyList {
+  IPLStart Iri PredicateObjectList ']'
+}
+
 Collection {
   '(' Object* ')'
+}
+
+Formula {
+  '{' FormulaContent? '}'
+}
+
+FormulaContent {
+  N3Statement ('.' FormulaContent?)?
+  | SparqlDirective FormulaContent?
 }
 
 NumericLiteral {
@@ -107,6 +149,10 @@ BlankNode {
     '#'+  ![\n]* "\n"? ('#'+ ![\n]* "\n")*
   }
 
+  IPLStart {
+    '[' Ws* 'id'
+  }
+  
   Iriref {
     '<' (![<>"{}|^`\\\u{0000}-\u{0020}] | $[])* '>'
   }
@@ -120,7 +166,7 @@ BlankNode {
   }
 
   @precedence {
-    Pname_ln, Pname_ns, "BASE", "PREFIX", "false", "true", String_literal_long_quote, String_literal_quote, "a", Double, Decimal, Integer, space
+    Pname_ln, Pname_ns, "BASE", "PREFIX", "false", "true", String_literal_long_quote, String_literal_quote, "a", "is", "has", Double, Decimal, ".", Integer, space
   }
   
   Blank_node_label {
@@ -179,6 +225,10 @@ BlankNode {
     '[' Ws* ']'
   }
 
+  QuickVar {
+    "?" Pn_local  
+  }
+  
   Pn_chars_base {
     $[A-Z] | $[a-z] | $[\u{00C0}-\u{00D6}] | $[\u{00D8}-\u{00F6}] | $[\u{00F8}-\u{02FF}] | $[\u{0370}-\u{037D}] | $[\u{037F}-\u{1FFF}] | $[\u{200C}-\u{200D}] | $[\u{2070}-\u{218F}] | $[\u{2C00}-\u{2FEF}] | $[\u{3001}-\u{D7FF}] | $[\u{F900}-\u{FDCF}] | $[\u{FDF0}-\u{FFFD}] | $[\u{10000}-\u{EFFFF}]
   }

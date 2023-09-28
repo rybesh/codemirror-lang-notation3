@@ -1,28 +1,34 @@
-# CodeMirror TURTLE Language Support
+# CodeMirror Notation3 Language Support
 
-<span><a href="https://www.npmjs.com/package/codemirror-lang-turtle" title="NPM version badge"><img src="https://img.shields.io/npm/v/codemirror-lang-turtle?color=blue" alt="NPM version badge" /></a></span>
+<!-- markdownlint-disable-next-line MD013 MD033 -->
+<span><a href="https://www.npmjs.com/package/codemirror-lang-notation3" title="NPM version badge"><img src="https://img.shields.io/npm/v/codemirror-lang-notation3?color=blue" alt="NPM version badge" /></a></span>
 
-A CodeMirror extension that provides Turtle syntax highlighting and language support.
+A CodeMirror extension that provides
+[Notation3](https://notation3.org) syntax highlighting and language
+support.
 
-### Usage
+Most of the code and grammar for this extension were written by Achraf
+Atauil for their
+[`codemirror-lang-turtle`](https://github.com/aatauil/codemirror-lang-turtle)
+extension.
+
+## Usage
 
 ```ts
 import { basicSetup } from 'codemirror';
 import { EditorView } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
-import { turtle } from 'codemirror-lang-turtle';
+import { notation3 } from 'codemirror-lang-notation3';
 
 const doc = `
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix dc: <http://purl.org/dc/elements/1.1/> .
-@prefix ex: <http://example.org/stuff/1.0/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix : <http://example.org/>.
 
-<http://www.w3.org/TR/rdf-syntax-grammar>
-  dc:title "RDF/XML Syntax Specification (Revised)" ;
-  ex:editor [
-    ex:fullname "Dave Beckett";
-    ex:homePage <http://purl.org/net/dajobe/>
-  ] .
+{ 
+  :weather a :Raining
+} => {
+  :weather a :Cloudy
+} . 
 `
 
 new EditorView({
@@ -30,7 +36,7 @@ new EditorView({
     doc,
     extensions: [
       basicSetup,
-      turtle(),
+      notation3(),
     ],
   }),
   parent: document.querySelector('#editor'),

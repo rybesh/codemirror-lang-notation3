@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "target": "es6",
-    "module": "es2020",
-    "newLine": "lf",
     "declaration": true,
-    "moduleResolution": "node"
+    "emitDeclarationOnly": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "es2020",
+    "moduleResolution": "nodenext",
+    "newLine": "lf",
+    "plugins": [{"name": "typescript-eslint-language-service"}],
+    "strict": true,
+    "target": "es2020"
   },
   "include": ["src/*.ts"]
 }

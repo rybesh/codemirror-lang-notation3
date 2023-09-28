@@ -1,5 +1,7 @@
-/src
-/test
 /node_modules
-rollup.config.js
+/src
+Makefile
+build.cjs
 tsconfig.json
+.eslintrc.js
+*.tgz

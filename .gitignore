@@ -1,6 +1,4 @@
 /node_modules
-package-lock.json
 /dist
 /src/parser.js
 /src/parser.terms.js
-/src/*.d.ts

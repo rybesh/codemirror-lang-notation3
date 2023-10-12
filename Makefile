@@ -1,6 +1,9 @@
-.PHONY: all clean
+.PHONY: all pack clean
 
 all: dist/index.js dist/index.d.ts
+
+pack: all
+	npm pack
 
 clean:
 	rm -rf src/parser.js src/parser.terms.js dist

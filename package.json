@@ -1,6 +1,6 @@
 {
   "name": "codemirror-lang-notation3",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Notation3 language support for CodeMirror",
   "type": "module",
   "module": "dist/index.js",

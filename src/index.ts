@@ -23,6 +23,10 @@ export const Notation3Language = LRLanguage.define({
       }),
     ],
   }),
+  languageData: {
+    commentTokens: { line: "#" },
+    wordChars: ":",
+  },
 })
 
 export function notation3() {
